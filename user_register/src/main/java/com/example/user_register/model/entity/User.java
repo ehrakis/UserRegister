@@ -20,7 +20,7 @@ public class User {
 
     @Id
     @Setter(AccessLevel.PROTECTED)
-    private String Id;
+    private String id;
 
     @NotNull
     @Size(min = 3, max = 30)
@@ -44,6 +44,7 @@ public class User {
     @Max(31)
     private Integer birthDay;
 
+    @NotNull
     private Language preferredLanguage;
 
     private Region region;
