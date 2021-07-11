@@ -8,10 +8,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.validation.constraints.*;
 
 @Getter
 @Setter
@@ -23,12 +22,16 @@ public class User {
     private String id;
 
     @NotNull
-    @Size(min = 3, max = 30)
+    @Size(min = 2, max = 30)
     private String firstname;
 
     @NotNull
     @Size(min = 3, max = 30)
     private String lastname;
+
+    @NotNull
+    @Email
+    private String email;
 
     @NotNull
     @Min(1900)
@@ -45,7 +48,9 @@ public class User {
     private Integer birthDay;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
     private Language preferredLanguage;
 
+    @Enumerated(EnumType.STRING)
     private Region region;
 }
