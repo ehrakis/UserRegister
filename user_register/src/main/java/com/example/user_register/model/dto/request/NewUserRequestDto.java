@@ -1,31 +1,21 @@
-package com.example.user_register.model.entity;
+package com.example.user_register.model.dto.request;
 
+import com.example.user_register.constraint.age.ValidAge;
 import com.example.user_register.constraint.password.ValidPassword;
 import com.example.user_register.model.enums.Language;
 import com.example.user_register.model.enums.Region;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.mongodb.core.index.Indexed;
 
-import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.Id;
 import javax.validation.constraints.*;
-import java.time.LocalDate;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity
-public class User {
-
-    @Id
-    @Setter(AccessLevel.PROTECTED)
-    private String id;
-
+public class NewUserRequestDto {
     @NotNull
     @Size(min = 2, max = 30)
     private String firstname;
@@ -35,20 +25,19 @@ public class User {
     private String lastname;
 
     @NotNull
-    @Getter(AccessLevel.PROTECTED)
-    private String password;
-
-    @NotNull
     @Email
-    @Indexed(unique=true)
     private String email;
 
     @NotNull
-    private LocalDate birthDate;
+    @ValidAge
+    private String birthDate;
 
     @NotNull
+    @ValidPassword
+    private String password;
+
     @Enumerated(EnumType.STRING)
-    private Language preferredLanguage;
+    private Language preferredLanguage = Language.FRENCH;
 
     @Enumerated(EnumType.STRING)
     private Region region;
