@@ -1,5 +1,6 @@
 package com.example.user_register.controller;
 
+import com.example.user_register.exception.UserNotFoundException;
 import com.example.user_register.model.dto.request.NewUserRequestDto;
 import com.example.user_register.model.dto.response.UserResponseDto;
 import com.example.user_register.service.UserService;
@@ -41,6 +42,21 @@ public class UserController {
         return userService.registerUser(newUserRequestDto);
     }
 
+    /**
+     * Endpoint to retrieve a user by its id.
+     * Possible status returned
+     *  - 200: User successfully returned.
+     *  - 404: User not found.
+     *
+     * @param userId The is of the user.
+     * @return a UserResponseDto
+     */
+    @GetMapping("{userId}")
+    public @ResponseBody
+    UserResponseDto getUser(@PathVariable String userId){
+        return userService.getUser(userId);
+    }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleValidationExceptions(
@@ -73,6 +89,15 @@ public class UserController {
         } else {
             errors.put("Bad request", "Please check the documentation");
         }
+        return errors;
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(UserNotFoundException.class)
+    public Map<String, String> handleImpossibleAgeExceptions(
+            UserNotFoundException ex) {
+        Map<String, String> errors = new HashMap<>();
+        errors.put("error", "User not found");
         return errors;
     }
 }

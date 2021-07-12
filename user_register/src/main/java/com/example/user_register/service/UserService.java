@@ -1,5 +1,6 @@
 package com.example.user_register.service;
 
+import com.example.user_register.exception.UserNotFoundException;
 import com.example.user_register.model.converter.UserDtoConverter;
 import com.example.user_register.model.dto.request.NewUserRequestDto;
 import com.example.user_register.model.dto.response.UserResponseDto;
@@ -7,6 +8,8 @@ import com.example.user_register.model.entity.User;
 import com.example.user_register.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -38,5 +41,21 @@ public class UserService {
         return this.userDtoConverter.userToUserResponseDto(
                 this.userRepository.save(user)
         );
+    }
+
+    /**
+     * Find a user by its id and return the user as a UserResponseDto.
+     * If the user can't be found then throw a UserNotFoundException.
+     *
+     * @param userId The userId to look for.
+     * @return a UserResponseDto containing the user parameters.
+     */
+    public UserResponseDto getUser(String userId){
+        Optional<User> user = userRepository.findById(userId);
+        if(user.isPresent()){
+            return this.userDtoConverter.userToUserResponseDto(user.get());
+        } else {
+            throw new UserNotFoundException("User not Found");
+        }
     }
 }

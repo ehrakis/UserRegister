@@ -1,6 +1,7 @@
 package com.example.user_register.controller;
 
 import com.example.user_register.Util.Utility;
+import com.example.user_register.exception.UserNotFoundException;
 import com.example.user_register.model.dto.request.NewUserRequestDto;
 import com.example.user_register.model.dto.response.UserResponseDto;
 import com.example.user_register.service.UserService;
@@ -212,6 +213,27 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.password").value(containsString("Password must contain 1 or more digit characters.")))
                 .andExpect(jsonPath("$.password").value(containsString("Password must be 8 or more characters in length.")))
                 .andExpect(jsonPath("$.password").value(containsString("Password matches 0 of 4 character rules, but 4 are required.")));
+    }
+
+    @Test
+    public void whenGetUser_givenValidId_returnUser() throws Exception {
+        String id = "aaa";
+        given(userService.getUser(id)).willReturn(new UserResponseDto());
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/register")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void whenGetUser_givenInvalidId_return404() throws Exception {
+        String id = "aaa";
+        given(userService.getUser(id)).willThrow(new UserNotFoundException("User not Found"));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/register")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.error").value("User not found"));
     }
 
 }
