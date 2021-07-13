@@ -1,4 +1,4 @@
-package com.example.user_register.Util;
+package com.example.user_register.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

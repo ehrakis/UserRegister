@@ -23,4 +23,32 @@ public class UserResponseDto {
     private Language preferredLanguage = Language.FRENCH;
 
     private Region region;
+
+    @Override
+    public String toString() {
+        String string = "UserResponseDto: "
+                .concat("id: ")
+                .concat(id)
+                .concat(", firstname: ")
+                .concat(firstname)
+                .concat(", lastname: ")
+                .concat(lastname)
+                .concat(", email: ")
+                .concat(email)
+                .concat(", birthDate: ")
+                .concat(birthDate.toString())
+                .concat(", preferredLanguage: ")
+                .concat(preferredLanguage.toString());
+
+        if(region != null) {
+            string = string
+                    .concat(", region: ")
+                    .concat(region.toString());
+        } else {
+            string = string
+                    .concat(", region: null");
+        }
+
+        return string;
+    }
 }

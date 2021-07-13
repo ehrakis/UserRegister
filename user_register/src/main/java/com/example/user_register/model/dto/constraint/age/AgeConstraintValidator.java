@@ -1,4 +1,4 @@
-package com.example.user_register.constraint.age;
+package com.example.user_register.model.dto.constraint.age;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

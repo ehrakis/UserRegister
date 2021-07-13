@@ -1,6 +1,5 @@
 package com.example.user_register.model.entity;
 
-import com.example.user_register.constraint.password.ValidPassword;
 import com.example.user_register.model.enums.Language;
 import com.example.user_register.model.enums.Region;
 import lombok.AccessLevel;
@@ -52,4 +51,32 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Region region;
+
+    @Override
+    public String toString(){
+        String string = "User: "
+                .concat("id: ")
+                .concat(id)
+                .concat(", firstname: ")
+                .concat(firstname)
+                .concat(", lastname: ")
+                .concat(lastname)
+                .concat(", email: ")
+                .concat(email)
+                .concat(", birthDate: ")
+                .concat(birthDate.toString())
+                .concat(", preferredLanguage: ")
+                .concat(preferredLanguage.toString());
+
+        if(region != null) {
+            string = string
+                    .concat(", region: ")
+                    .concat(region.toString());
+        } else {
+            string = string
+                    .concat(", region: null");
+        }
+
+        return string;
+    }
 }

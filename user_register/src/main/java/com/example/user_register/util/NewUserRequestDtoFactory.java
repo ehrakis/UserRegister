@@ -1,4 +1,4 @@
-package com.example.user_register.Util;
+package com.example.user_register.util;
 
 import com.example.user_register.model.dto.request.NewUserRequestDto;
 import com.example.user_register.model.enums.Language;

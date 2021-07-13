@@ -5,7 +5,7 @@ import com.example.user_register.model.dto.request.NewUserRequestDto;
 import com.example.user_register.model.dto.response.UserResponseDto;
 import com.example.user_register.model.entity.User;
 import com.example.user_register.repository.UserRepository;
-import com.example.user_register.Util.NewUserRequestDtoFactory;
+import com.example.user_register.util.NewUserRequestDtoFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.Answer;

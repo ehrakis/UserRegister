@@ -1,4 +1,4 @@
-package com.example.user_register.constraint.password;
+package com.example.user_register.model.dto.constraint.password;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

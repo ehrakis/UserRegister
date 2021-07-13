@@ -1,11 +1,11 @@
 package com.example.user_register.controller;
 
-import com.example.user_register.Util.Utility;
+import com.example.user_register.util.Utility;
 import com.example.user_register.exception.UserNotFoundException;
 import com.example.user_register.model.dto.request.NewUserRequestDto;
 import com.example.user_register.model.dto.response.UserResponseDto;
 import com.example.user_register.service.UserService;
-import com.example.user_register.Util.NewUserRequestDtoFactory;
+import com.example.user_register.util.NewUserRequestDtoFactory;
 import com.mongodb.MongoWriteException;
 import com.mongodb.ServerAddress;
 import com.mongodb.WriteError;

@@ -1,5 +1,7 @@
 package com.example.user_register.controller;
 
+import com.example.user_register.aop.annotation.ExecutionTime;
+import com.example.user_register.aop.annotation.LogInputOutput;
 import com.example.user_register.exception.UserNotFoundException;
 import com.example.user_register.model.dto.request.NewUserRequestDto;
 import com.example.user_register.model.dto.response.UserResponseDto;
@@ -35,6 +37,8 @@ public class UserController {
      * @param newUserRequestDto the parameter of the requests.
      * @return a UserResponseDto if the user is successfully created, or an error otherwise.
      */
+    @ExecutionTime
+    @LogInputOutput
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("register")
     public @ResponseBody
@@ -51,6 +55,8 @@ public class UserController {
      * @param userId The is of the user.
      * @return a UserResponseDto
      */
+    @ExecutionTime
+    @LogInputOutput
     @GetMapping("{userId}")
     public @ResponseBody
     UserResponseDto getUser(@PathVariable String userId){

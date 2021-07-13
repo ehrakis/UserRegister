@@ -1,5 +1,7 @@
 package com.example.user_register.service;
 
+import com.example.user_register.aop.annotation.ExecutionTime;
+import com.example.user_register.aop.annotation.LogInputOutput;
 import com.example.user_register.exception.UserNotFoundException;
 import com.example.user_register.model.converter.UserDtoConverter;
 import com.example.user_register.model.dto.request.NewUserRequestDto;
@@ -34,6 +36,8 @@ public class UserService {
      * @param newUserRequestDto The NewUserRequestDto to user to register a new user.
      * @return a UserResponseDto containing user's information.
      */
+    @LogInputOutput
+    @ExecutionTime
     public UserResponseDto registerUser(NewUserRequestDto newUserRequestDto){
         User user = this.userDtoConverter.newUserRequestDtoToEntity(newUserRequestDto);
         user.setPassword(passwordEncoder.encode(newUserRequestDto.getPassword()));
@@ -50,6 +54,8 @@ public class UserService {
      * @param userId The userId to look for.
      * @return a UserResponseDto containing the user parameters.
      */
+    @LogInputOutput
+    @ExecutionTime
     public UserResponseDto getUser(String userId){
         Optional<User> user = userRepository.findById(userId);
         if(user.isPresent()){
