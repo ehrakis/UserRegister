@@ -7,6 +7,7 @@ import com.example.user_register.model.enums.Region;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -15,6 +16,7 @@ import javax.validation.constraints.*;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class NewUserRequestDto {
     @NotNull
     @Size(min = 2, max = 30)
@@ -34,6 +36,7 @@ public class NewUserRequestDto {
 
     @NotNull
     @ValidPassword
+    @ToString.Exclude
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -41,30 +44,4 @@ public class NewUserRequestDto {
 
     @Enumerated(EnumType.STRING)
     private Region region;
-
-    @Override
-    public String toString() {
-        String string = "NewUserRequestDto: "
-                .concat(" firstname: ")
-                .concat(firstname)
-                .concat(", lastname: ")
-                .concat(lastname)
-                .concat(", email: ")
-                .concat(email)
-                .concat(", birthDate: ")
-                .concat(birthDate)
-                .concat(", preferredLanguage: ")
-                .concat(preferredLanguage.toString());
-
-        if(region != null) {
-            string = string
-                .concat(", region: ")
-                .concat(region.toString());
-        } else {
-            string = string
-                    .concat(", region: null");
-        }
-
-        return string;
-    }
 }

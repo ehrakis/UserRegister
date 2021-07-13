@@ -5,12 +5,14 @@ import com.example.user_register.model.enums.Region;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDate;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class UserResponseDto {
     private String id;
 
@@ -23,32 +25,4 @@ public class UserResponseDto {
     private Language preferredLanguage = Language.FRENCH;
 
     private Region region;
-
-    @Override
-    public String toString() {
-        String string = "UserResponseDto: "
-                .concat("id: ")
-                .concat(id)
-                .concat(", firstname: ")
-                .concat(firstname)
-                .concat(", lastname: ")
-                .concat(lastname)
-                .concat(", email: ")
-                .concat(email)
-                .concat(", birthDate: ")
-                .concat(birthDate.toString())
-                .concat(", preferredLanguage: ")
-                .concat(preferredLanguage.toString());
-
-        if(region != null) {
-            string = string
-                    .concat(", region: ")
-                    .concat(region.toString());
-        } else {
-            string = string
-                    .concat(", region: null");
-        }
-
-        return string;
-    }
 }

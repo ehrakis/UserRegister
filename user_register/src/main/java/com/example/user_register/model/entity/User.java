@@ -2,10 +2,7 @@ package com.example.user_register.model.entity;
 
 import com.example.user_register.model.enums.Language;
 import com.example.user_register.model.enums.Region;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.mongodb.core.index.Indexed;
 
 import javax.persistence.Entity;
@@ -19,6 +16,7 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @Entity
+@ToString()
 public class User {
 
     @Id
@@ -35,6 +33,7 @@ public class User {
 
     @NotNull
     @Getter(AccessLevel.PROTECTED)
+    @ToString.Exclude
     private String password;
 
     @NotNull
@@ -51,32 +50,4 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Region region;
-
-    @Override
-    public String toString(){
-        String string = "User: "
-                .concat("id: ")
-                .concat(id)
-                .concat(", firstname: ")
-                .concat(firstname)
-                .concat(", lastname: ")
-                .concat(lastname)
-                .concat(", email: ")
-                .concat(email)
-                .concat(", birthDate: ")
-                .concat(birthDate.toString())
-                .concat(", preferredLanguage: ")
-                .concat(preferredLanguage.toString());
-
-        if(region != null) {
-            string = string
-                    .concat(", region: ")
-                    .concat(region.toString());
-        } else {
-            string = string
-                    .concat(", region: null");
-        }
-
-        return string;
-    }
 }
