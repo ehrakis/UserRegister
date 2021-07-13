@@ -1,15 +1,19 @@
 package com.example.user_register.service;
 
+import com.example.user_register.exception.UserNotFoundException;
 import com.example.user_register.model.dto.request.NewUserRequestDto;
 import com.example.user_register.model.dto.response.UserResponseDto;
 import com.example.user_register.model.entity.User;
 import com.example.user_register.repository.UserRepository;
 import com.example.user_register.Util.NewUserRequestDtoFactory;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -47,5 +51,22 @@ public class UserServiceTest {
         assertThat(userResponseDto.getPreferredLanguage()).isEqualTo(newUserRequestDto.getPreferredLanguage());
         assertThat(userResponseDto.getRegion()).isEqualTo(newUserRequestDto.getRegion());
     }
+
+    @Test
+    public void whenGetUser_givenValidUserId_returnUserResponseDto(){
+        String id = "userId";
+        given(userRepository.findById(id)).willReturn(Optional.of(new User()));
+        UserResponseDto user = userService.getUser(id);
+        assertThat(user).isNotNull();
+    }
+
+    @Test
+    public void whenGetUser_givenInvalidUserId_throwUserNotFoundException(){
+        String id = "userId";
+        given(userRepository.findById(id)).willReturn(Optional.empty());
+        Assertions.assertThrows(UserNotFoundException.class, () -> userService.getUser(id));
+    }
+
+
 
 }

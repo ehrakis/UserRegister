@@ -220,7 +220,7 @@ public class UserControllerTest {
         String id = "aaa";
         given(userService.getUser(id)).willReturn(new UserResponseDto());
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/user/register")
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/" + id)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
@@ -230,7 +230,7 @@ public class UserControllerTest {
         String id = "aaa";
         given(userService.getUser(id)).willThrow(new UserNotFoundException("User not Found"));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/user/register")
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/" + id)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.error").value("User not found"));
