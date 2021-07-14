@@ -16,10 +16,9 @@ public enum Region {
     PROVENCE_ALPES_COTE_D_AZUR("Provence-Alpes-Côte d'Azur");
 
 
-
     public final String region;
 
-    private Region(String region) {
+    Region(String region) {
         this.region = region;
     }
 }

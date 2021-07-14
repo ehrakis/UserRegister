@@ -23,8 +23,8 @@ public class LogInputOutputAdvice {
     public Object trackTime(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         logger.info("Inputs for: "
                 .concat(proceedingJoinPoint.getSignature().toShortString()));
-        for (Object object: proceedingJoinPoint.getArgs()) {
-            if(object != null) {
+        for (Object object : proceedingJoinPoint.getArgs()) {
+            if (object != null) {
                 logger.info(object.toString());
             } else {
                 logger.info("null");
@@ -35,7 +35,7 @@ public class LogInputOutputAdvice {
 
         logger.info("Outputs for: "
                 .concat(proceedingJoinPoint.getSignature().toShortString()));
-        if(object != null) {
+        if (object != null) {
             logger.info(object.toString());
         } else {
             logger.info("null");

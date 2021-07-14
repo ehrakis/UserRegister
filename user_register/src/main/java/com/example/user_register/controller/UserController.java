@@ -16,7 +16,7 @@ public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserService userService){
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
@@ -24,8 +24,8 @@ public class UserController {
      * Endpoint to create a new user.
      * The request must contain a valid NewUserRequestDto object.
      * Possible status returned:
-     *  - 201: User successfully created.
-     *  - 400: Request badly formatted.
+     * - 201: User successfully created.
+     * - 400: Request badly formatted.
      *
      * @param newUserRequestDto the parameter of the requests.
      * @return a UserResponseDto if the user is successfully created, or an error otherwise.
@@ -35,15 +35,15 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("register")
     public @ResponseBody
-    UserResponseDto createUser(@Valid @RequestBody NewUserRequestDto newUserRequestDto){
+    UserResponseDto createUser(@Valid @RequestBody NewUserRequestDto newUserRequestDto) {
         return userService.registerUser(newUserRequestDto);
     }
 
     /**
      * Endpoint to retrieve a user by its id.
      * Possible status returned
-     *  - 200: User successfully returned.
-     *  - 404: User not found.
+     * - 200: User successfully returned.
+     * - 404: User not found.
      *
      * @param userId The is of the user.
      * @return a UserResponseDto
@@ -52,7 +52,7 @@ public class UserController {
     @LogInputOutput
     @GetMapping("{userId}")
     public @ResponseBody
-    UserResponseDto getUser(@PathVariable String userId){
+    UserResponseDto getUser(@PathVariable String userId) {
         return userService.getUser(userId);
     }
 }

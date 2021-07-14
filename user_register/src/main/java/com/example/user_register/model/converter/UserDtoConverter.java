@@ -15,7 +15,7 @@ public class UserDtoConverter {
 
     private final ModelMapper modelMapper;
 
-    public UserDtoConverter(ModelMapper modelMapper){
+    public UserDtoConverter(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
     }
 
@@ -27,7 +27,7 @@ public class UserDtoConverter {
      */
     @LogInputOutput
     @ExecutionTime
-    public User newUserRequestDtoToEntity(NewUserRequestDto newUserRequestDto){
+    public User newUserRequestDtoToEntity(NewUserRequestDto newUserRequestDto) {
         User user = modelMapper.map(newUserRequestDto, User.class);
         user.setBirthDate(LocalDate.parse(newUserRequestDto.getBirthDate()));
         return user;

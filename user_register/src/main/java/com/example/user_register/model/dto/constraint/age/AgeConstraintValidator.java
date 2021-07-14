@@ -21,11 +21,11 @@ public class AgeConstraintValidator implements ConstraintValidator<ValidAge, Str
      * @param birthDate The birthDate to test.
      * @return a boolean, True if the birthDate is older than 18, False otherwise.
      */
-    private boolean isOlderThan18YearOld(LocalDate birthDate){
+    private boolean isOlderThan18YearOld(LocalDate birthDate) {
         LocalDate today = LocalDate.now();
 
         LocalDate majority = LocalDate
-                .of(today.getYear()-18, today.getMonthValue(), today.getDayOfMonth())
+                .of(today.getYear() - 18, today.getMonthValue(), today.getDayOfMonth())
                 .plusDays(1L);
 
         return birthDate.isBefore(majority);
@@ -37,11 +37,11 @@ public class AgeConstraintValidator implements ConstraintValidator<ValidAge, Str
      * @param birthDate The birthDate to test.
      * @return a boolean, True if the birthDate is older than 150, False otherwise.
      */
-    private boolean isOlderThan150YearOld(LocalDate birthDate){
+    private boolean isOlderThan150YearOld(LocalDate birthDate) {
         LocalDate today = LocalDate.now();
 
         LocalDate oldAge = LocalDate
-                .of(today.getYear()-150, today.getMonthValue(), today.getDayOfMonth());
+                .of(today.getYear() - 150, today.getMonthValue(), today.getDayOfMonth());
 
         return birthDate.isBefore(oldAge);
     }
@@ -49,11 +49,11 @@ public class AgeConstraintValidator implements ConstraintValidator<ValidAge, Str
     /**
      * Custom validator for the birthDate field.
      * Age must be:
-     *  - More than 18
-     *  - Less than 150
+     * - More than 18
+     * - Less than 150
      *
      * @param birthDate The birthDate to check.
-     * @param context The context of the application.
+     * @param context   The context of the application.
      * @return a boolean true if the birthDate is valid and false otherwise.
      */
     @Override
@@ -65,7 +65,7 @@ public class AgeConstraintValidator implements ConstraintValidator<ValidAge, Str
                 return true;
             }
 
-        } catch (DateTimeParseException e){
+        } catch (DateTimeParseException e) {
             throw new InvalidBirthDateFormatException(INVALID_DATE_FORMAT);
         }
 

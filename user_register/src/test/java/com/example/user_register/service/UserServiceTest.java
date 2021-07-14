@@ -7,16 +7,13 @@ import com.example.user_register.model.dto.response.UserResponseDto;
 import com.example.user_register.model.entity.User;
 import com.example.user_register.repository.UserRepository;
 import com.example.user_register.util.NewUserRequestDtoFactory;
-import com.mongodb.MongoWriteException;
-import com.mongodb.ServerAddress;
-import com.mongodb.WriteError;
-import org.bson.BsonDocument;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.dao.DuplicateKeyException;
 
 import java.util.Optional;
 
@@ -37,7 +34,7 @@ public class UserServiceTest {
     private NewUserRequestDtoFactory newUserRequestDtoFactory;
 
     @Test
-    public void whenRegisterUser_givenValidNewUserRequestDto_returnValidUserResponseDto(){
+    public void whenRegisterUser_givenValidNewUserRequestDto_returnValidUserResponseDto() {
         // Return the same user object as provided in parameter.
         given(userRepository.save(any(User.class))).willAnswer((Answer<User>) invocation -> {
             Object[] arguments = invocation.getArguments();
@@ -58,9 +55,9 @@ public class UserServiceTest {
     }
 
     @Test
-    public void whenRegisterUser_givenDuplicateEmail_throwEmailAlreadyExistException(){
+    public void whenRegisterUser_givenDuplicateEmail_throwEmailAlreadyExistException() {
         given(userRepository.save(any(User.class)))
-                .willThrow(new MongoWriteException(new WriteError(0, "email dup key", new BsonDocument()), new ServerAddress()));
+                .willThrow(new DuplicateKeyException("email dup key"));
 
         NewUserRequestDto newUserRequestDto = newUserRequestDtoFactory.getNewUserRequestDto(NewUserRequestDtoFactory.VALID);
 
@@ -68,7 +65,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void whenGetUser_givenValidUserId_returnUserResponseDto(){
+    public void whenGetUser_givenValidUserId_returnUserResponseDto() {
         String id = "userId";
         given(userRepository.findById(id)).willReturn(Optional.of(new User()));
         UserResponseDto user = userService.getUser(id);
@@ -76,12 +73,11 @@ public class UserServiceTest {
     }
 
     @Test
-    public void whenGetUser_givenInvalidUserId_throwUserNotFoundException(){
+    public void whenGetUser_givenInvalidUserId_throwUserNotFoundException() {
         String id = "userId";
         given(userRepository.findById(id)).willReturn(Optional.empty());
         Assertions.assertThrows(UserNotFoundException.class, () -> userService.getUser(id));
     }
-
 
 
 }

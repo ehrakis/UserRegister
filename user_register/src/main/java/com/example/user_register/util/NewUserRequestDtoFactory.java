@@ -18,17 +18,17 @@ public class NewUserRequestDtoFactory {
     /**
      * Create a NewUserRequestDto object according to the specified type.
      * The 4 types are:
-     *  - SIMPLE:       only mandatory data with valid formatting.
-     *  - VALID:        SIMPLE + optional fields.
-     *  - UNDER_AGE:    VALID with a birthDate lower than 18 years old.
-     *  - OVER_AGE:     VALID with a birthDate older than 150 years old.
+     * - SIMPLE:       only mandatory data with valid formatting.
+     * - VALID:        SIMPLE + optional fields.
+     * - UNDER_AGE:    VALID with a birthDate lower than 18 years old.
+     * - OVER_AGE:     VALID with a birthDate older than 150 years old.
      *
      * @param type One of the static string of the current class.
      *             Possible values are: SIMPLE, VALID, UNDER_AGE, OVER_AGE.
      * @return a NewUserRequestDto according to the specified type.
      */
-    public NewUserRequestDto getNewUserRequestDto(String type){
-        if(type == null){
+    public NewUserRequestDto getNewUserRequestDto(String type) {
+        if (type == null) {
             return null;
         }
 
@@ -44,14 +44,14 @@ public class NewUserRequestDtoFactory {
 
     /**
      * Create a NewUserRequestDto with only the required fields:
-     *  - Email
-     *  - Firstname
-     *  - Lastname
-     *  - BirthDate
+     * - Email
+     * - Firstname
+     * - Lastname
+     * - BirthDate
      *
      * @return The NewUserRequestDto created.
      */
-    private NewUserRequestDto getSimple(){
+    private NewUserRequestDto getSimple() {
         NewUserRequestDto newUserRequestDto = new NewUserRequestDto();
         newUserRequestDto.setEmail("jhon.doe@gmail.com");
         newUserRequestDto.setFirstname("Jhon");
@@ -63,17 +63,17 @@ public class NewUserRequestDtoFactory {
 
     /**
      * Get a valid user from the getSimple function and add:
-     *  - PreferredLanguage
-     *  - Region
+     * - PreferredLanguage
+     * - Region
      *
      * @return The NewUserRequestDto created.
      */
-    private NewUserRequestDto getValid(){
+    private NewUserRequestDto getValid() {
         NewUserRequestDto newUserRequestDto = this.getSimple();
         newUserRequestDto.setPreferredLanguage(Language.ENGLISH);
         newUserRequestDto.setRegion(Region.PROVENCE_ALPES_COTE_D_AZUR);
 
-        return  newUserRequestDto;
+        return newUserRequestDto;
     }
 
     /**
@@ -81,10 +81,10 @@ public class NewUserRequestDtoFactory {
      *
      * @return The NewUserRequestDto created.
      */
-    private NewUserRequestDto getUnderAge(){
+    private NewUserRequestDto getUnderAge() {
         NewUserRequestDto newUserRequestDto = this.getValid();
         newUserRequestDto.setBirthDate(LocalDate.now().toString());
-        return  newUserRequestDto;
+        return newUserRequestDto;
     }
 
     /**
@@ -92,15 +92,15 @@ public class NewUserRequestDtoFactory {
      *
      * @return The NewUserRequestDto created.
      */
-    private NewUserRequestDto getOverAge(){
+    private NewUserRequestDto getOverAge() {
         NewUserRequestDto newUserRequestDto = this.getValid();
 
         LocalDate today = LocalDate.now();
         LocalDate oldAge = LocalDate
-                .of(today.getYear()-200, today.getMonthValue(), today.getDayOfMonth());
+                .of(today.getYear() - 200, today.getMonthValue(), today.getDayOfMonth());
 
         newUserRequestDto.setBirthDate(oldAge.toString());
 
-        return  newUserRequestDto;
+        return newUserRequestDto;
     }
 }

@@ -15,14 +15,14 @@ public class PasswordConstraintValidator implements ConstraintValidator<ValidPas
     /**
      * Custom validator for the password field.
      * Password must contain:
-     *  - One lowercase letter
-     *  - One uppercase letter
-     *  - One digit
-     *  - One special character
+     * - One lowercase letter
+     * - One uppercase letter
+     * - One digit
+     * - One special character
      * And be at least 8 character long.
      *
      * @param password The password to check.
-     * @param context The context of the application.
+     * @param context  The context of the application.
      * @return a boolean true if the password is valid and false otherwise.
      */
     @Override

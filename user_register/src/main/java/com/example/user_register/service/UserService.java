@@ -9,7 +9,7 @@ import com.example.user_register.model.dto.request.NewUserRequestDto;
 import com.example.user_register.model.dto.response.UserResponseDto;
 import com.example.user_register.model.entity.User;
 import com.example.user_register.repository.UserRepository;
-import com.mongodb.MongoWriteException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +27,7 @@ public class UserService {
 
     public UserService(UserRepository userRepository,
                        UserDtoConverter userDtoConverter,
-                       PasswordEncoder passwordEncoder){
+                       PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userDtoConverter = userDtoConverter;
         this.passwordEncoder = passwordEncoder;
@@ -43,15 +43,15 @@ public class UserService {
      */
     @LogInputOutput
     @ExecutionTime
-    public UserResponseDto registerUser(NewUserRequestDto newUserRequestDto){
+    public UserResponseDto registerUser(NewUserRequestDto newUserRequestDto) {
         User user = this.userDtoConverter.newUserRequestDtoToEntity(newUserRequestDto);
         user.setPassword(passwordEncoder.encode(newUserRequestDto.getPassword()));
 
-        // Handle error if the email already exist.
-        try{
+        // Throw corresponding error if the email already exist.
+        try {
             user = this.userRepository.save(user);
-        } catch (MongoWriteException e){
-            if (e.getMessage().contains("email dup key")){
+        } catch (DuplicateKeyException e) {
+            if (e.getMessage().contains("email dup key")) {
                 throw new EmailAlreadyExistException(EMAIL_ALREADY_USED);
 
             } else {
@@ -71,9 +71,9 @@ public class UserService {
      */
     @LogInputOutput
     @ExecutionTime
-    public UserResponseDto getUser(String userId){
+    public UserResponseDto getUser(String userId) {
         Optional<User> user = userRepository.findById(userId);
-        if(user.isPresent()){
+        if (user.isPresent()) {
             return this.userDtoConverter.userToUserResponseDto(user.get());
         } else {
             throw new UserNotFoundException(USER_NOT_FOUND);
