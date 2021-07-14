@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.format.DateTimeParseException;
 
+import static com.example.user_register.exception.ErrorMessage.*;
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -30,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 public class UserControllerTest {
+
     @MockBean
     private UserService userService;
 
@@ -60,7 +62,8 @@ public class UserControllerTest {
                 .content(Utility.asJsonString(newUserRequestDto))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.birthDate").value("User must be between 18 and 150 years old."));
+                .andExpect(jsonPath("$.".concat(BIRTH_DATE_FIELD))
+                        .value(INVALID_USER_AGE));
     }
 
     @Test
@@ -71,7 +74,8 @@ public class UserControllerTest {
                 .content(Utility.asJsonString(newUserRequestDto))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.birthDate").value("User must be between 18 and 150 years old."));
+                .andExpect(jsonPath("$.".concat(BIRTH_DATE_FIELD))
+                        .value(INVALID_USER_AGE));
     }
 
     @Test
@@ -84,7 +88,8 @@ public class UserControllerTest {
                 .content(Utility.asJsonString(newUserRequestDto))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.birthDate").value("The date should be in the format: yyyy-mm-dd"));
+                .andExpect(jsonPath("$.".concat(BIRTH_DATE_FIELD))
+                        .value(INVALID_DATE_FORMAT));
     }
 
     @Test
@@ -96,7 +101,8 @@ public class UserControllerTest {
                 .content(Utility.asJsonString(newUserRequestDto))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.firstname").value("must not be null"));
+                .andExpect(jsonPath("$.".concat(FIRSTNAME_FIELD))
+                        .value(MUST_NOT_BE_NUL));
     }
 
     @Test
@@ -108,7 +114,8 @@ public class UserControllerTest {
                 .content(Utility.asJsonString(newUserRequestDto))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.firstname").value("size must be between 2 and 30"));
+                .andExpect(jsonPath("$.".concat(FIRSTNAME_FIELD))
+                        .value(SIZE_BETWEEN_2_AND_30));
     }
 
     @Test
@@ -120,7 +127,8 @@ public class UserControllerTest {
                 .content(Utility.asJsonString(newUserRequestDto))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.firstname").value("size must be between 2 and 30"));
+                .andExpect(jsonPath("$.".concat(FIRSTNAME_FIELD))
+                        .value(SIZE_BETWEEN_2_AND_30));
     }
 
     @Test
@@ -132,7 +140,8 @@ public class UserControllerTest {
                 .content(Utility.asJsonString(newUserRequestDto))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.lastname").value("must not be null"));
+                .andExpect(jsonPath("$.".concat(LASTNAME_FIELD))
+                        .value(MUST_NOT_BE_NUL));
     }
 
     @Test
@@ -144,7 +153,8 @@ public class UserControllerTest {
                 .content(Utility.asJsonString(newUserRequestDto))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.lastname").value("size must be between 2 and 30"));
+                .andExpect(jsonPath("$.".concat(LASTNAME_FIELD))
+                        .value(SIZE_BETWEEN_2_AND_30));
     }
 
     @Test
@@ -156,7 +166,8 @@ public class UserControllerTest {
                 .content(Utility.asJsonString(newUserRequestDto))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.lastname").value("size must be between 2 and 30"));
+                .andExpect(jsonPath("$.".concat(LASTNAME_FIELD))
+                        .value(SIZE_BETWEEN_2_AND_30));
     }
 
     @Test
@@ -168,7 +179,8 @@ public class UserControllerTest {
                 .content(Utility.asJsonString(newUserRequestDto))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.email").value("must not be null"));
+                .andExpect(jsonPath("$.".concat(EMAIL_FIELD))
+                        .value(MUST_NOT_BE_NUL));
     }
 
     @Test
@@ -180,7 +192,8 @@ public class UserControllerTest {
                 .content(Utility.asJsonString(newUserRequestDto))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.email").value("must be a well-formed email address"));
+                .andExpect(jsonPath("$.".concat(EMAIL_FIELD))
+                        .value(EMAIL_BADDLY_FORMATED));
     }
 
     @Test
@@ -195,7 +208,8 @@ public class UserControllerTest {
                 .content(Utility.asJsonString(newUserRequestDto))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.email").value("This email is already used"));
+                .andExpect(jsonPath("$.".concat(EMAIL_FIELD))
+                        .value(EMAIL_ALREADY_USED));
     }
 
     @Test
@@ -207,12 +221,18 @@ public class UserControllerTest {
                 .content(Utility.asJsonString(newUserRequestDto))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.password").value(containsString("Password must contain 1 or more uppercase characters.")))
-                .andExpect(jsonPath("$.password").value(containsString("Password must contain 1 or more lowercase characters.")))
-                .andExpect(jsonPath("$.password").value(containsString("Password must contain 1 or more special characters.")))
-                .andExpect(jsonPath("$.password").value(containsString("Password must contain 1 or more digit characters.")))
-                .andExpect(jsonPath("$.password").value(containsString("Password must be 8 or more characters in length.")))
-                .andExpect(jsonPath("$.password").value(containsString("Password matches 0 of 4 character rules, but 4 are required.")));
+                .andExpect(jsonPath("$.".concat(PASSWORD_FIELD))
+                        .value(containsString(PASSWORD_HAS_ONE_UPPERCASE_CHARACTER)))
+                .andExpect(jsonPath("$.".concat(PASSWORD_FIELD))
+                        .value(containsString(PASSWORD_HAS_ONE_LOWERCASE_CHARACTER)))
+                .andExpect(jsonPath("$.".concat(PASSWORD_FIELD))
+                        .value(containsString(PASSWORD_HAS_ONE_SPECIAL_CHARACTER)))
+                .andExpect(jsonPath("$.".concat(PASSWORD_FIELD))
+                        .value(containsString(PASSWORD_HAS_ONE_DIGIT_CHARACTER)))
+                .andExpect(jsonPath("$.".concat(PASSWORD_FIELD))
+                        .value(containsString(PASSWORD_SIZE_INVALID)))
+                .andExpect(jsonPath("$.".concat(PASSWORD_FIELD))
+                        .value(containsString(PASSWORD_RULES_NOT_MATCHING)));
     }
 
     @Test
@@ -228,12 +248,12 @@ public class UserControllerTest {
     @Test
     public void whenGetUser_givenInvalidId_return404() throws Exception {
         String id = "aaa";
-        given(userService.getUser(id)).willThrow(new UserNotFoundException("User not Found"));
+        given(userService.getUser(id)).willThrow(new UserNotFoundException(USER_NOT_FOUND));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/user/" + id)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.error").value("User not found"));
+                .andExpect(jsonPath("$.".concat(ERROR_FIELD)).value(USER_NOT_FOUND));
     }
 
 }

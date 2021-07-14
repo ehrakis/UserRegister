@@ -4,6 +4,8 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.time.LocalDate;
 
+import static com.example.user_register.exception.ErrorMessage.INVALID_USER_AGE;
+
 public class AgeConstraintValidator implements ConstraintValidator<ValidAge, String> {
     @Override
     public void initialize(ValidAge arg0) {
@@ -59,7 +61,7 @@ public class AgeConstraintValidator implements ConstraintValidator<ValidAge, Str
         }
 
         context.disableDefaultConstraintViolation();
-        context.buildConstraintViolationWithTemplate("User must be between 18 and 150 years old.")
+        context.buildConstraintViolationWithTemplate(INVALID_USER_AGE)
                 .addConstraintViolation();
         return false;
     }

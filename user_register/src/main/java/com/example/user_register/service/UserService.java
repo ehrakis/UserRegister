@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import static com.example.user_register.exception.ErrorMessage.USER_NOT_FOUND;
+
 @Service
 public class UserService {
 
@@ -61,7 +63,7 @@ public class UserService {
         if(user.isPresent()){
             return this.userDtoConverter.userToUserResponseDto(user.get());
         } else {
-            throw new UserNotFoundException("User not Found");
+            throw new UserNotFoundException(USER_NOT_FOUND);
         }
     }
 }

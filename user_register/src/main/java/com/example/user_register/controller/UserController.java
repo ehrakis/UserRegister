@@ -17,6 +17,8 @@ import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.example.user_register.exception.ErrorMessage.*;
+
 @RestController
 @RequestMapping(path = "user")
 public class UserController {
@@ -81,7 +83,7 @@ public class UserController {
     public Map<String, String> handleImpossibleAgeExceptions(
             DateTimeParseException ex) {
         Map<String, String> errors = new HashMap<>();
-        errors.put("birthDate", "The date should be in the format: yyyy-mm-dd");
+        errors.put(BIRTH_DATE_FIELD, INVALID_DATE_FORMAT);
         return errors;
     }
 
@@ -91,9 +93,9 @@ public class UserController {
             MongoWriteException ex) {
         Map<String, String> errors = new HashMap<>();
         if(ex.getMessage().contains("email dup key")) {
-            errors.put("email", "This email is already used");
+            errors.put(EMAIL_FIELD, EMAIL_ALREADY_USED);
         } else {
-            errors.put("Bad request", "Please check the documentation");
+            errors.put(ERROR_FIELD, "Error during user creation");
         }
         return errors;
     }
@@ -103,7 +105,7 @@ public class UserController {
     public Map<String, String> handleImpossibleAgeExceptions(
             UserNotFoundException ex) {
         Map<String, String> errors = new HashMap<>();
-        errors.put("error", "User not found");
+        errors.put(ERROR_FIELD, USER_NOT_FOUND);
         return errors;
     }
 }
