@@ -1,7 +1,8 @@
 package com.example.user_register.exception;
 
+import com.example.user_register.exception.user.EmailAlreadyExistException;
+import com.example.user_register.exception.user.InvalidBirthDateFormatException;
 import com.example.user_register.exception.user.UserNotFoundException;
-import com.mongodb.MongoWriteException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,35 +35,32 @@ public class UserExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(DateTimeParseException.class)
+    @ExceptionHandler(InvalidBirthDateFormatException.class)
     @ResponseBody
-    public Map<String, String> handleImpossibleAgeExceptions(DateTimeParseException ex) {
+    public Map<String, String> handleInvalidBirthDateFormatExceptions(InvalidBirthDateFormatException e) {
         Map<String, String> errors = new HashMap<>();
-        errors.put(BIRTH_DATE_FIELD, INVALID_DATE_FORMAT);
+
+        errors.put(BIRTH_DATE_FIELD, e.getMessage());
         return errors;
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MongoWriteException.class)
+    @ExceptionHandler(EmailAlreadyExistException.class)
     @ResponseBody
-    public Map<String, String> handleImpossibleAgeExceptions(
-            MongoWriteException ex) {
+    public Map<String, String> handleMongoWriteException(
+            EmailAlreadyExistException e) {
         Map<String, String> errors = new HashMap<>();
-        if(ex.getMessage().contains("email dup key")) {
-            errors.put(EMAIL_FIELD, EMAIL_ALREADY_USED);
-        } else {
-            errors.put(ERROR_FIELD, "Error during user creation");
-        }
+        errors.put(EMAIL_FIELD, e.getMessage());
         return errors;
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(UserNotFoundException.class)
     @ResponseBody
-    public Map<String, String> handleImpossibleAgeExceptions(
-            UserNotFoundException ex) {
+    public Map<String, String> handleUserNotFoundExceptions(
+            UserNotFoundException e) {
         Map<String, String> errors = new HashMap<>();
-        errors.put(ERROR_FIELD, USER_NOT_FOUND);
+        errors.put(ERROR_FIELD, e.getMessage());
         return errors;
     }
 }

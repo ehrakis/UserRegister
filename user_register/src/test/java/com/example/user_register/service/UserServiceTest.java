@@ -1,11 +1,16 @@
 package com.example.user_register.service;
 
+import com.example.user_register.exception.user.EmailAlreadyExistException;
 import com.example.user_register.exception.user.UserNotFoundException;
 import com.example.user_register.model.dto.request.NewUserRequestDto;
 import com.example.user_register.model.dto.response.UserResponseDto;
 import com.example.user_register.model.entity.User;
 import com.example.user_register.repository.UserRepository;
 import com.example.user_register.util.NewUserRequestDtoFactory;
+import com.mongodb.MongoWriteException;
+import com.mongodb.ServerAddress;
+import com.mongodb.WriteError;
+import org.bson.BsonDocument;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.Answer;
@@ -50,6 +55,16 @@ public class UserServiceTest {
         assertThat(userResponseDto.getBirthDate()).isEqualTo(newUserRequestDto.getBirthDate());
         assertThat(userResponseDto.getPreferredLanguage()).isEqualTo(newUserRequestDto.getPreferredLanguage());
         assertThat(userResponseDto.getRegion()).isEqualTo(newUserRequestDto.getRegion());
+    }
+
+    @Test
+    public void whenRegisterUser_givenDuplicateEmail_throwEmailAlreadyExistException(){
+        given(userRepository.save(any(User.class)))
+                .willThrow(new MongoWriteException(new WriteError(0, "email dup key", new BsonDocument()), new ServerAddress()));
+
+        NewUserRequestDto newUserRequestDto = newUserRequestDtoFactory.getNewUserRequestDto(NewUserRequestDtoFactory.VALID);
+
+        Assertions.assertThrows(EmailAlreadyExistException.class, () -> userService.registerUser(newUserRequestDto));
     }
 
     @Test

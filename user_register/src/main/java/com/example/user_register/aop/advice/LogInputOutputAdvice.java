@@ -23,15 +23,23 @@ public class LogInputOutputAdvice {
     public Object trackTime(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         logger.info("Inputs for: "
                 .concat(proceedingJoinPoint.getSignature().toShortString()));
-        for (Object obj: proceedingJoinPoint.getArgs()) {
-            logger.info(obj.toString());
+        for (Object object: proceedingJoinPoint.getArgs()) {
+            if(object != null) {
+                logger.info(object.toString());
+            } else {
+                logger.info("null");
+            }
         }
 
         Object object = proceedingJoinPoint.proceed();
 
         logger.info("Outputs for: "
                 .concat(proceedingJoinPoint.getSignature().toShortString()));
-        logger.info(object.toString());
+        if(object != null) {
+            logger.info(object.toString());
+        } else {
+            logger.info("null");
+        }
 
         return object;
     }

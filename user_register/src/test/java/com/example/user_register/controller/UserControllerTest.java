@@ -1,15 +1,12 @@
 package com.example.user_register.controller;
 
-import com.example.user_register.util.Utility;
+import com.example.user_register.exception.user.EmailAlreadyExistException;
 import com.example.user_register.exception.user.UserNotFoundException;
 import com.example.user_register.model.dto.request.NewUserRequestDto;
 import com.example.user_register.model.dto.response.UserResponseDto;
 import com.example.user_register.service.UserService;
 import com.example.user_register.util.NewUserRequestDtoFactory;
-import com.mongodb.MongoWriteException;
-import com.mongodb.ServerAddress;
-import com.mongodb.WriteError;
-import org.bson.BsonDocument;
+import com.example.user_register.util.Utility;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -19,14 +16,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.time.format.DateTimeParseException;
-
 import static com.example.user_register.exception.ErrorMessage.*;
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -81,8 +76,7 @@ public class UserControllerTest {
     @Test
     public void whenCreateUser_givenBadFormatBirthDateUserDto_return400() throws Exception {
         NewUserRequestDto newUserRequestDto = newUserRequestDtoFactory.getNewUserRequestDto(NewUserRequestDtoFactory.VALID);
-
-        given(userService.registerUser(any(NewUserRequestDto.class))).willThrow(new DateTimeParseException("", "", 0));
+        newUserRequestDto.setBirthDate("not a date");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/user/register")
                 .content(Utility.asJsonString(newUserRequestDto))
@@ -200,9 +194,7 @@ public class UserControllerTest {
     public void whenCreateUser_givenAlreadyExistEmailUserDto_return400() throws Exception {
         NewUserRequestDto newUserRequestDto = newUserRequestDtoFactory.getNewUserRequestDto(NewUserRequestDtoFactory.VALID);
 
-        given(userService.registerUser(any(NewUserRequestDto.class))).willThrow(
-                new MongoWriteException(
-                        new WriteError(0, "email dup key", new BsonDocument()), new ServerAddress()));
+        given(userService.registerUser(any(NewUserRequestDto.class))).willThrow(new EmailAlreadyExistException(EMAIL_ALREADY_USED));
 
         mockMvc.perform(MockMvcRequestBuilders.post("/user/register")
                 .content(Utility.asJsonString(newUserRequestDto))

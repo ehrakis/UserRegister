@@ -1,9 +1,13 @@
 package com.example.user_register.model.dto.constraint.age;
 
+import com.example.user_register.exception.user.InvalidBirthDateFormatException;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
+import static com.example.user_register.exception.ErrorMessage.INVALID_DATE_FORMAT;
 import static com.example.user_register.exception.ErrorMessage.INVALID_USER_AGE;
 
 public class AgeConstraintValidator implements ConstraintValidator<ValidAge, String> {
@@ -54,10 +58,15 @@ public class AgeConstraintValidator implements ConstraintValidator<ValidAge, Str
      */
     @Override
     public boolean isValid(String birthDate, ConstraintValidatorContext context) {
-        LocalDate date = LocalDate.parse(birthDate);
 
-        if (!isOlderThan150YearOld(date) && isOlderThan18YearOld(date)) {
-            return true;
+        try {
+            LocalDate date = LocalDate.parse(birthDate);
+            if (!isOlderThan150YearOld(date) && isOlderThan18YearOld(date)) {
+                return true;
+            }
+
+        } catch (DateTimeParseException e){
+            throw new InvalidBirthDateFormatException(INVALID_DATE_FORMAT);
         }
 
         context.disableDefaultConstraintViolation();

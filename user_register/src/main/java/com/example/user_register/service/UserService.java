@@ -2,17 +2,20 @@ package com.example.user_register.service;
 
 import com.example.user_register.aop.annotation.ExecutionTime;
 import com.example.user_register.aop.annotation.LogInputOutput;
+import com.example.user_register.exception.user.EmailAlreadyExistException;
 import com.example.user_register.exception.user.UserNotFoundException;
 import com.example.user_register.model.converter.UserDtoConverter;
 import com.example.user_register.model.dto.request.NewUserRequestDto;
 import com.example.user_register.model.dto.response.UserResponseDto;
 import com.example.user_register.model.entity.User;
 import com.example.user_register.repository.UserRepository;
+import com.mongodb.MongoWriteException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import static com.example.user_register.exception.ErrorMessage.EMAIL_ALREADY_USED;
 import static com.example.user_register.exception.ErrorMessage.USER_NOT_FOUND;
 
 @Service
@@ -44,9 +47,19 @@ public class UserService {
         User user = this.userDtoConverter.newUserRequestDtoToEntity(newUserRequestDto);
         user.setPassword(passwordEncoder.encode(newUserRequestDto.getPassword()));
 
-        return this.userDtoConverter.userToUserResponseDto(
-                this.userRepository.save(user)
-        );
+        // Handle error if the email already exist.
+        try{
+            user = this.userRepository.save(user);
+        } catch (MongoWriteException e){
+            if (e.getMessage().contains("email dup key")){
+                throw new EmailAlreadyExistException(EMAIL_ALREADY_USED);
+
+            } else {
+                throw e;
+            }
+        }
+
+        return this.userDtoConverter.userToUserResponseDto(user);
     }
 
     /**
