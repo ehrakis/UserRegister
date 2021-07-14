@@ -1,7 +1,7 @@
 package com.example.user_register.controller;
 
 import com.example.user_register.util.Utility;
-import com.example.user_register.exception.UserNotFoundException;
+import com.example.user_register.exception.user.UserNotFoundException;
 import com.example.user_register.model.dto.request.NewUserRequestDto;
 import com.example.user_register.model.dto.response.UserResponseDto;
 import com.example.user_register.service.UserService;
